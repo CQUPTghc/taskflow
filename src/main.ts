@@ -1,5 +1,7 @@
 import "./style.css";
 import "./components/task-card";
+import "./components/task-column";
+import "./pages/board-page";
 import { store } from "./core/store";
 
 console.log("TaskFlow 初始状态：", store.state);
