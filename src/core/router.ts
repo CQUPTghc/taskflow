@@ -18,7 +18,7 @@ class Router{
 
     addRoute(path: string, pageConstructor: PageConstructor){
         this.routes.set(path, pageConstructor);
-        console.log(this.routes);
+        
     }
 
     navigate(path:string){
@@ -30,10 +30,9 @@ class Router{
 
     private render(){
         const path = window.location.pathname;
-        console.log(path);
+        
         const PageConstructor = this.routes.get(path);
-        console.log(PageConstructor);
-        console.log(this.currentPage);
+        
         if(!this.outlet) return;
 
         if(this.currentPage){
@@ -44,7 +43,7 @@ class Router{
         if(PageConstructor){
             this.currentPage = new PageConstructor();
             this.outlet.appendChild(this.currentPage);
-            console.log(this.currentPage);
+            
         } else {
             this.outlet.innerHTML = '<not-found-page></not-found-page>';
         }

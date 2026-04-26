@@ -1,6 +1,10 @@
-// src/core/store.ts
+import { saveToDB, loadFromDB } from "../utils/storage";
 
 type Listener = () => void;
+
+function isObject(value: unknown): value is Record<string, unknown>{
+  return value!== null && typeof value === 'object';
+}
 
 //createStore函数返回原对象的代理对象（有拦截功能）和一个订阅原对象的方法
 export function createStore<T extends object>(initialState: T) {
@@ -64,6 +68,11 @@ export interface AppState {
   columns: Column[];
 }
 
+const emptyState: AppState = {
+  tasks:[],
+  columns:[]
+};
+
 // 初始演示数据
 const initialState: AppState = {
   tasks: [
@@ -79,7 +88,30 @@ const initialState: AppState = {
 };
 
 // 创建并导出全局 store 实例
-export const store = createStore(initialState);
+export const store = createStore(emptyState);
+
+async function initStore() {
+  const { tasks, columns } = await loadFromDB();
+  if(tasks.length > 0 || columns.length > 0){
+    store.state.tasks = tasks;
+    store.state.columns = columns;
+  } else{
+    store.state.tasks = initialState.tasks;
+    store.state.columns = initialState.columns;
+
+    await saveToDB(store.state.tasks, store.state.columns);
+  }
+}
+
+let saveTimer: number | undefined;
+store.subscribe(() => {
+  clearTimeout(saveTimer);
+  saveTimer = window.setTimeout(() => {
+    saveToDB(store.state.tasks, store.state.columns);
+  }, 300);
+});
+
+initStore();
 
 // 挂载到 window 方便调试
 if (typeof window !== "undefined") {

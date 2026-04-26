@@ -10,8 +10,6 @@ import { NotFoundPage } from "./pages/not-found-page";
 import './components/app-link';
 
 router.addRoute('/', BoardPage);
-
-
 router.addRoute('/settings', SettingsPage);
 
 router.init('#app');
