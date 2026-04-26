@@ -2,7 +2,7 @@ import {store} from '../core/store';
 import '../components/task-card';
 import '../components/task-column';
 
-class BoardPage extends HTMLElement {
+export class BoardPage extends HTMLElement {
     private unsubscribe: (() => void) | null = null;
 
     constructor(){
@@ -34,6 +34,7 @@ class BoardPage extends HTMLElement {
         }).join('');
 
         this.shadowRoot!.innerHTML = `
+            <div><app-link href="/settings">⚙️ 设置</app-link></div>
             <style>
                 :host {
                 display: flex;

@@ -1,8 +1,22 @@
 import "./style.css";
-import "./components/task-card";
-import "./components/task-column";
-import "./pages/board-page";
+
 import { store } from "./core/store";
+import { router } from "./core/router";
+
+import { BoardPage } from "./pages/board-page";
+import { SettingsPage } from "./pages/settings-page";
+import { NotFoundPage } from "./pages/not-found-page";
+
+import './components/app-link';
+
+router.addRoute('/', BoardPage);
+
+
+router.addRoute('/settings', SettingsPage);
+
+router.init('#app');
+
+
 
 console.log("TaskFlow 初始状态：", store.state);
 
