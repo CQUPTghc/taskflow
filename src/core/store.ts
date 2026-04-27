@@ -66,15 +66,21 @@ export interface Column {
 export interface AppState {
   tasks: Task[];
   columns: Column[];
+  ui: {
+    theme: 'light' | 'dark';
+  };
 }
 
 const emptyState: AppState = {
   tasks:[],
-  columns:[]
+  columns:[],
+  ui:{
+    theme: (localStorage.getItem('theme') as 'light' | 'dark') || 'light'
+  }
 };
 
 // 初始演示数据
-const initialState: AppState = {
+const initialState = {
   tasks: [
     { id: "1", title: "学习 Proxy", columnId: "col1" },
     { id: "2", title: "掌握 Web Components", columnId: "col1" },
@@ -110,6 +116,12 @@ store.subscribe(() => {
     saveToDB(store.state.tasks, store.state.columns);
   }, 300);
 });
+
+store.subscribe(() => {
+  const currentTheme = store.state.ui.theme;
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  localStorage.setItem('theme', currentTheme);
+})
 
 initStore();
 

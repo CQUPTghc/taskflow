@@ -39,14 +39,14 @@ class TaskCard extends HTMLElement{
         this.shadowRoot!.innerHTML = `
             <style>
                 .card {
-                border: 1px solid #e0e0e0;
+                border: 1px solid var(--border-color);
                 border-radius: 8px;
                 padding: 12px 16px;
                 margin: 8px 0;
-                background-color: #ffffff;
-                box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-                font-family: system-ui, sans-serif;
-                color: #333;
+                background-color: var(--card-bg);
+                box-shadow: var(--shadow);
+                
+                color: var(--text-primary);
                 transition: box-shadow 0.2s;
                 }
                 .card:hover {

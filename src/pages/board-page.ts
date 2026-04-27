@@ -43,6 +43,7 @@ export class BoardPage extends HTMLElement {
                 gap: 16px;
                 overflow-x: auto;
                 min-height: calc(100vh - 40px);
+                background-color: var(--bg-primary);
                 }
             </style>
             ${columnsHTML}

@@ -27,7 +27,7 @@ class TaskColumn extends HTMLElement{
                     flex-direction: column;
                     width: 280px;
                     min-height: 200px;
-                    background: #f4f5f7;
+                    background: var(--column-bg);
                     border-radius: 8px;
                     padding: 12px;
                     margin-right: 16px;
@@ -36,7 +36,7 @@ class TaskColumn extends HTMLElement{
                 .column-header{
                     font-weight: 600;
                     font-size: 14px;
-                    color: #5e6c84;
+                    color: var(--text-secondary);
                     margin-bottom: 12px;
                     text-transform: uppercase;
                     letter-spacing: 0.5px;
