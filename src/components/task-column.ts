@@ -1,3 +1,5 @@
+import { store } from "../core/store";
+
 class TaskColumn extends HTMLElement{
     static get observedAttributes(){
         return ['column-title', 'column-id'];
@@ -10,11 +12,49 @@ class TaskColumn extends HTMLElement{
 
     connectedCallback(){
         this.render();
+        this.addEventListener('dragover',this.onDragOver);
+        this.addEventListener('dragleave',this.onDragLeave);
+        this.addEventListener('drop',this.onDrop);
+    }
+
+    disconnectedCallback(){
+        this.removeEventListener('dragover', this.onDragOver);
+        this.removeEventListener('dragleave', this.onDragLeave);
+        this.removeEventListener('drop', this.onDrop);
     }
 
     attributeChangedCallback(){
         this.render();
     }
+
+    private onDragOver = (e:DragEvent) => {
+        e.preventDefault();
+        if(e.dataTransfer){
+            e.dataTransfer.dropEffect = 'move';
+        }
+
+        (this.shadowRoot?.querySelector('.column') as HTMLElement)?.classList.add('drag-over');
+    };
+
+    private onDragLeave = () => {
+        (this.shadowRoot?.querySelector('.column') as HTMLElement)?.classList.remove('drag-over');
+    };
+
+    private onDrop = (e: DragEvent) => {
+        e.preventDefault();
+        (this.shadowRoot?.querySelector('.column') as HTMLElement)?.classList.remove('drag-over');
+
+        const taskId = e.dataTransfer?.getData('text/plain');
+        if(!taskId) return;
+
+        const columnId = this.getAttribute('column-id');
+        if(!columnId) return;
+
+        const task = store.state.tasks.find(t => t.id === taskId);
+        if(task){
+            task.columnId = columnId;
+        }
+    };
 
     render(){
         const columnTitle = this.getAttribute('column-title') || '未命名列';
@@ -33,6 +73,15 @@ class TaskColumn extends HTMLElement{
                     margin-right: 16px;
                     flex-shrink: 0;
                 }
+                .column {
+                    display: flex;
+                    flex-direction: column;
+                    height: 100%;
+                }
+                .column.drag-over{
+                    background-color: rgba(0,100,255,0.08);
+                    border-radius: 8px;
+                }
                 .column-header{
                     font-weight: 600;
                     font-size: 14px;
@@ -48,9 +97,11 @@ class TaskColumn extends HTMLElement{
                     gap: 8px;
                 }
             </style>
-            <div class="column-header">${columnTitle}</div>
-            <div class="cards-container">
-                <slot></slot>
+            <div class="column">
+                <div class="column-header">${columnTitle}</div>
+                <div class="cards-container">
+                    <slot></slot>
+                </div>
             </div>
         `;
     }

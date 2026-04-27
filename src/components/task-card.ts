@@ -12,16 +12,34 @@ class TaskCard extends HTMLElement{
         this.attachShadow({mode:'open'});    }
 
     connectedCallback(){
+        this.setAttribute('draggable','true');
+        this.addEventListener('dragstart', this.onDragStart);
+        this.addEventListener('dragend', this.onDragEnd);
         this.unsubscribe = store.subscribe(()=>this.render());
         this.render();
     }
 
     disconnectedCallback(){
+        this.removeEventListener('dragstart', this.onDragStart);
+        this.removeEventListener('dragend', this.onDragEnd);
         this.unsubscribe?.();
     }
 
     attributeChangedCallback(){
         this.render();
+    }
+
+    private onDragStart = (e:DragEvent) => {
+        const taskId = this.getAttribute('task-id');
+        if(!taskId) return;
+
+        e.dataTransfer?.setData('text/plain',taskId);
+        e.dataTransfer!.effectAllowed = 'move';
+        this.style.opacity = '0.4';
+    }
+
+    private onDragEnd = () => {
+        this.style.opacity = '1';
     }
 
     render(){
@@ -47,7 +65,11 @@ class TaskCard extends HTMLElement{
                 box-shadow: var(--shadow);
                 
                 color: var(--text-primary);
-                transition: box-shadow 0.2s;
+                transition: box-shadow 0.2s, opacity 0.2s;
+                cursor: grab;
+                }
+                .card:active{
+                    cursor:grabbing;
                 }
                 .card:hover {
                 box-shadow: 0 4px 6px rgba(0,0,0,0.05);

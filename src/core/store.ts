@@ -87,9 +87,9 @@ const initialState = {
     { id: "3", title: "搭建 Vite 项目", columnId: "col2" },
   ],
   columns: [
-    { id: "col1", title: "待办" },
-    { id: "col2", title: "进行中" },
-    { id: "col3", title: "已完成" },
+    { id: "1", title: "待办" },
+    { id: "2", title: "进行中" },
+    { id: "3", title: "已完成" },
   ],
 };
 
